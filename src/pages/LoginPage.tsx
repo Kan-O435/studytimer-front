@@ -16,8 +16,8 @@ const handleLogin = async () => {
   setError('');
   try {
     const res = await axios.post('http://localhost:3000/auth/sign_in', {
-      email,
-      password,
+      email: email,
+      password: password,
     });
 
     const headers = res.headers;
