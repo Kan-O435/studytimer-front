@@ -1,4 +1,3 @@
-// src/App.tsx
 import { useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -6,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import TimerPage from './pages/TimerPage';
 import WeeklyReportPage from './pages/WeeklyReportPage';
+import ReviewPage from './pages/ReviewPage'; // ← 追加
 
 export default function App() {
   useEffect(() => {
@@ -26,9 +26,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        {/* ここを修正しました！ :taskId を追加することで、URLからタスクIDを読み取れるようになります。*/}
         <Route path="/timer/:taskId" element={<TimerPage />} />
         <Route path="/weekly-report" element={<WeeklyReportPage />} />
+        <Route path="/review" element={<ReviewPage />} /> {/* ← 追加 */}
       </Routes>
     </BrowserRouter>
   );
