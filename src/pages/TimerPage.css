@@ -1,0 +1,211 @@
+/* TimerPage.css */
+
+/* 基本レイアウト */
+.timer-page-container {
+  max-width: 600px; /* コンテンツの最大幅を制限 */
+  margin: 40px auto; /* 上下左右中央寄せ */
+  padding: 25px;
+  text-align: center; /* テキストを中央寄せ */
+  background-color: #f9f9f9; /* やや明るい背景色 */
+  border-radius: 12px; /* 角を丸くする */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 軽い影 */
+  font-family: 'Arial', sans-serif; /* フォント設定 */
+  color: #333; /* デフォルトの文字色 */
+}
+
+/* タイトル */
+.timer-page-title {
+  font-size: 2.8rem; /* 大きめのフォントサイズ */
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #2c3e50; /* 濃い青系の色 */
+  border-bottom: 3px solid #3498db; /* 下線 */
+  padding-bottom: 10px;
+}
+
+/* タスク名 */
+.task-title {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+/* 時間設定入力欄 */
+.time-input-group {
+  margin-bottom: 30px;
+}
+
+.time-input-label {
+  display: block; /* ブロック要素にして改行 */
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.time-input {
+  border: 2px solid #ccc; /* ボーダー */
+  border-radius: 8px; /* 角を丸くする */
+  padding: 10px 15px;
+  width: 120px; /* 幅を固定 */
+  font-size: 1.8rem; /* 大きなフォントサイズ */
+  text-align: center; /* 中央寄せ */
+  outline: none; /* フォーカス時のアウトラインを消す */
+  transition: border-color 0.3s ease; /* ホバー・フォーカス時のアニメーション */
+}
+
+.time-input:focus {
+  border-color: #3498db; /* フォーカス時に色を変える */
+}
+
+/* 残り時間表示 */
+.remaining-time {
+  font-size: 5rem; /* 非常に大きなフォントサイズ */
+  font-family: 'SF Mono', 'Consolas', monospace; /* 等幅フォントで視認性向上 */
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #28a745; /* 緑色で目立つように */
+  background-color: #e8f5e9; /* 薄い緑色の背景 */
+  padding: 15px 25px;
+  border-radius: 10px;
+  display: inline-block; /* 中央寄せと背景色の適用 */
+  min-width: 200px; /* 最小幅 */
+}
+
+/* 操作ボタンのコンテナ */
+.timer-controls {
+  display: flex; /* ボタンを横並びにする */
+  justify-content: center; /* 中央寄せ */
+  gap: 20px; /* ボタン間の隙間 */
+  margin-bottom: 40px;
+}
+
+/* ボタンの共通スタイル */
+.timer-button {
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* アニメーション */
+  color: white; /* 文字色を白に統一 */
+  min-width: 150px; /* ボタンの最小幅 */
+}
+
+/* 開始ボタン */
+.start-button {
+  background-color: #28a745; /* 緑色 */
+}
+
+.start-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px); /* 少し浮き上がる */
+}
+
+/* 一時停止ボタン */
+.pause-button {
+  background-color: #ffc107; /* 黄色 */
+}
+
+.pause-button:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
+}
+
+/* 終了ボタン */
+.stop-button {
+  background-color: #dc3545; /* 赤色 */
+}
+
+.stop-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* ダッシュボードへのリンク */
+.dashboard-link {
+  font-size: 1.1rem;
+  color: #007bff; /* 青色 */
+  text-decoration: none; /* 下線をなくす */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.dashboard-link:hover {
+  color: #0056b3;
+  text-decoration: underline; /* ホバー時に下線 */
+}
+
+/* レスポンシブデザインの調整 */
+@media (max-width: 768px) {
+  .timer-page-container {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .timer-page-title {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
+
+  .task-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+
+  .time-input {
+    font-size: 1.5rem;
+    width: 100px;
+  }
+
+  .remaining-time {
+    font-size: 4rem;
+    padding: 10px 20px;
+  }
+
+  .timer-button {
+    padding: 12px 25px;
+    font-size: 1.3rem;
+    min-width: 120px;
+  }
+
+  .dashboard-link {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timer-page-container {
+    padding: 15px;
+  }
+
+  .timer-page-title {
+    font-size: 2rem;
+  }
+
+  .task-title {
+    font-size: 1.3rem;
+  }
+
+  .time-input {
+    font-size: 1.2rem;
+    width: 90px;
+  }
+
+  .remaining-time {
+    font-size: 3rem;
+    margin-bottom: 30px;
+  }
+
+  .timer-controls {
+    flex-direction: column; /* ボタンを縦に並べる */
+    gap: 15px;
+  }
+
+  .timer-button {
+    width: 80%; /* 幅を広げる */
+    margin: 0 auto; /* 中央寄せ */
+    font-size: 1.2rem;
+    padding: 10px 20px;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './WeeklyReport.css'; // CSSファイルを読み込む
+import './WeeklyReport.css';
 
 interface Session {
   id: number;
@@ -56,8 +56,19 @@ const WeeklyReport: React.FC = () => {
         }
 
         const json = await response.json();
-        setReportData(json.data ?? json); // json.data に対応 or そのまま
-        setSummary(json.summary ?? null);
+        console.log('受信した summary:', json.summary); // ← ログ追加
+        setReportData(json.data ?? []);
+
+        if (typeof json.summary === 'string') {
+          const cleanedSummary = json.summary.replace(/^"|"$/g, '');
+          if (cleanedSummary === 'null' || cleanedSummary.trim() === '') {
+            setSummary(null);
+          } else {
+            setSummary(cleanedSummary);
+          }
+        } else {
+          setSummary(null);
+        }
       } catch (err: any) {
         console.error('週次レポート取得エラー:', err);
         setError(err.message || '不明なエラー');
@@ -75,11 +86,11 @@ const WeeklyReport: React.FC = () => {
 
   return (
     <div className="container">
-      <h2 className="title">週次レポート</h2>
+      <h2 className="title">今週の振り返り</h2>
 
       {summary && (
         <div className="summaryBox">
-          <h3 className="summaryHeader">今週の総括（LLM）</h3>
+          <h3 className="summaryHeader"></h3>
           <p>{summary}</p>
         </div>
       )}

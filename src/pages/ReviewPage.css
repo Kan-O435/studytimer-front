@@ -1,0 +1,225 @@
+/* ReviewPage.css */
+
+/* コンテナの基本スタイル */
+.review-page-container {
+  max-width: 600px; /* 最大幅を設定 */
+  margin: 40px auto; /* 上下左右中央寄せ */
+  padding: 25px;
+  text-align: center; /* テキストを中央寄せ */
+  background-color: #ffffff; /* 白い背景 */
+  border-radius: 12px; /* 角を丸くする */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 影を追加 */
+  font-family: 'Arial', sans-serif; /* フォント設定 */
+  color: #333; /* デフォルトの文字色 */
+}
+
+/* ページタイトル */
+.review-page-title {
+  font-size: 2.8rem; /* 大きめのフォントサイズ */
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #2c3e50; /* 濃い青系の色 */
+  border-bottom: 3px solid #3498db; /* 下線 */
+  padding-bottom: 10px;
+}
+
+/* タスク名 */
+.review-task-title {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+/* フォームのコンテナ */
+.review-form {
+  display: flex;
+  flex-direction: column; /* 要素を縦に並べる */
+  gap: 25px; /* 要素間の隙間 */
+  margin-top: 30px;
+}
+
+/* 評価セクション */
+.rating-section {
+  text-align: center; /* 中央寄せ */
+}
+
+.rating-label {
+  display: block; /* ブロック要素にして改行 */
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.star-buttons-container {
+  display: flex;
+  justify-content: center; /* 星を中央寄せ */
+  gap: 8px; /* 星間の隙間 */
+}
+
+.star-button {
+  font-size: 3.5rem; /* 星のフォントサイズを大きく */
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0 5px; /* クリックしやすいようにパディング */
+  transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
+  color: #ccc; /* デフォルトの灰色 */
+  outline: none; /* フォーカス時のアウトラインを消す */
+}
+
+/* 選択された星のスタイル */
+.star-button.selected {
+  color: #ffeb3b; /* 選択された星の黄色 */
+  text-shadow: 0 0 8px rgba(255, 235, 59, 0.7); /* 輝くような影 */
+}
+
+/* ホバー時のスタイル */
+.star-button:hover:not(.selected) {
+  color: #ddd; /* ホバー時に少し明るい灰色 */
+}
+
+.star-button.selected:hover {
+  color: #ffe000; /* 選択された星のホバー時にさらに明るく */
+}
+
+/* エラーメッセージ */
+.error-message {
+  color: #dc3545; /* 赤色のエラーテキスト */
+  font-size: 0.95rem;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* コメントセクション */
+.comment-section {
+  text-align: left; /* ラベルを左寄せに */
+}
+
+.comment-label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.comment-textarea {
+  width: 100%; /* 幅いっぱい */
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 100px; /* 最小の高さ */
+  resize: vertical; /* 垂直方向のみリサイズ可能 */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment-textarea:focus {
+  border-color: #3498db; /* フォーカス時に青色 */
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* フォーカス時の影 */
+}
+
+/* 送信ボタン */
+.submit-button {
+  padding: 15px 35px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  background-color: #007bff; /* 青色 */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: auto; /* コンテンツに合わせて幅を調整 */
+  margin: 0 auto; /* 中央寄せ */
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  opacity: 0.5; /* 無効時は半透明に */
+  cursor: not-allowed;
+}
+
+/* ダッシュボードに戻るボタン（リンク風） */
+.back-to-dashboard-button {
+  margin-top: 40px; /* 上部のマージン */
+  font-size: 1.1rem;
+  color: #666; /* グレー系の文字色 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none; /* デフォルトの下線を消す */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.back-to-dashboard-button:hover {
+  color: #007bff; /* ホバー時に青色 */
+  text-decoration: underline; /* ホバー時に下線 */
+}
+
+
+/* レスポンシブデザインの調整 */
+@media (max-width: 768px) {
+  .review-page-container {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .review-page-title {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
+
+  .review-task-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+
+  .star-button {
+    font-size: 3rem;
+  }
+
+  .submit-button {
+    padding: 12px 30px;
+    font-size: 1.4rem;
+  }
+
+  .back-to-dashboard-button {
+    font-size: 1rem;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .review-page-container {
+    padding: 15px;
+  }
+
+  .review-page-title {
+    font-size: 2rem;
+  }
+
+  .review-task-title {
+    font-size: 1.3rem;
+  }
+
+  .star-button {
+    font-size: 2.5rem;
+  }
+
+  .review-form {
+    gap: 20px;
+  }
+
+  .submit-button {
+    font-size: 1.3rem;
+    padding: 10px 25px;
+  }
+}

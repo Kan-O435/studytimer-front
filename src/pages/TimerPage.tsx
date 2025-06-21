@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import './TimerPage.css'; // ★この行は正しいです
 
 export default function TimerPage() {
   const { taskId } = useParams<{ taskId: string }>();
@@ -219,14 +220,19 @@ export default function TimerPage() {
   }, [remainingSeconds, isRunning, timerSessionId, navigate, inputMinutes, taskTitle]); // 必要な依存関係をすべて含める
 
   return (
-    <div className="max-w-xl mx-auto p-4 text-center">
-      <h1 className="text-4xl font-bold mb-6">タイマー</h1>
-      <h2 className="text-2xl mb-4">タスク: {taskTitle}</h2>
+    // ★変更: divのclassNameを変更
+    <div className="timer-page-container">
+      {/* ★変更: h1のclassNameを変更 */}
+      <h1 className="timer-page-title">タイマー</h1>
+      {/* ★変更: h2のclassNameを変更 */}
+      <h2 className="task-title">タスク: {taskTitle}</h2>
 
       {/* タイマーが実行中でない場合のみ、時間設定入力欄を表示 */}
       {!isRunning && (
-        <div className="mb-6">
-          <label htmlFor="timeInput" className="block mb-2 text-lg">
+        // ★変更: divのclassNameを追加
+        <div className="time-input-group">
+          {/* ★変更: labelのclassNameを変更 */}
+          <label htmlFor="timeInput" className="time-input-label">
             タイマー設定時間（分）
           </label>
           <input
@@ -235,36 +241,42 @@ export default function TimerPage() {
             min="1"
             value={inputMinutes}
             onChange={(e) => setInputMinutes(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 w-32 text-center text-xl"
+            // ★変更: inputのclassNameを変更
+            className="time-input"
           />
         </div>
       )}
 
       {/* 残り時間の表示 */}
-      <div className="text-6xl font-mono mb-8">{formatTime(remainingSeconds)}</div>
+      {/* ★変更: divのclassNameを変更 */}
+      <div className="remaining-time">{formatTime(remainingSeconds)}</div>
 
       {/* 操作ボタン */}
-      <div className="space-x-4">
+      {/* ★変更: divのclassNameを変更 */}
+      <div className="timer-controls">
         {!isRunning ? (
           // タイマーが実行中でない場合は「開始」ボタン
+          // ★変更: buttonのclassNameを変更
           <button
             onClick={startTimer}
-            className="px-6 py-3 bg-green-500 text-white text-xl rounded-lg hover:bg-green-600 transition-colors"
+            className="timer-button start-button"
           >
             開始
           </button>
         ) : (
           // タイマー実行中の場合は「一時停止」と「終了」ボタン
           <>
+            {/* ★変更: buttonのclassNameを変更 */}
             <button
               onClick={pauseTimer}
-              className="px-6 py-3 bg-yellow-500 text-white text-xl rounded-lg hover:bg-yellow-600 transition-colors"
+              className="timer-button pause-button"
             >
               一時停止
             </button>
+            {/* ★変更: buttonのclassNameを変更 */}
             <button
               onClick={stopTimer}
-              className="px-6 py-3 bg-red-500 text-white text-xl rounded-lg hover:bg-red-600 transition-colors"
+              className="timer-button stop-button"
             >
               終了
             </button>
@@ -273,8 +285,10 @@ export default function TimerPage() {
       </div>
 
       {/* ダッシュボードへのリンク */}
-      <div className="mt-8">
-        <Link to="/dashboard" className="text-blue-600 hover:underline">
+      {/* ★変更: divのclassNameを変更（もし必要なら） */}
+      <div className="dashboard-link-container"> {/* 新しいクラス名を提案 */}
+        {/* ★変更: LinkのclassNameを変更 */}
+        <Link to="/dashboard" className="dashboard-link">
           ダッシュボードに戻る
         </Link>
       </div>

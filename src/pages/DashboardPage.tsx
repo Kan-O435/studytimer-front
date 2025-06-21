@@ -86,7 +86,7 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard-wrapper">
-      <h1 className="dashboard-title">ダッシュボード</h1>
+      <h1 className="dashboard-title">#勉強してください</h1>
 
       <section className="tasks-section">
         <h2 className="section-title">やることリスト</h2>

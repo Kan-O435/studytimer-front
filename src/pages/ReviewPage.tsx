@@ -1,11 +1,9 @@
-// src/components/ReviewPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './ReviewPage.css'; // ReviewPage.css のインポート
 
 export default function ReviewPage() {
-  // console.log("DEBUG: ReviewPage is starting to render!"); // デバッグ用ログ、必要に応じてコメントアウトを外してください
-
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -75,36 +73,44 @@ export default function ReviewPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4 text-center">
-      <h1 className="text-4xl font-bold mb-6">レビュー</h1>
-      <h2 className="text-2xl mb-4">タスク: {taskTitle}</h2>
+    // ★変更: divのclassNameを 'review-page-container' に変更
+    <div className="review-page-container">
+      {/* ★変更: h1のclassNameを 'review-page-title' に変更 */}
+      <h1 className="review-page-title">レビュー</h1>
+      {/* ★変更: h2のclassNameを 'review-task-title' に変更 */}
+      <h2 className="review-task-title">タスク: {taskTitle}</h2>
 
-      <form onSubmit={handleSubmitReview} className="space-y-6">
-        <div>
-          <label className="block text-lg font-medium mb-2">評価 (1-5)</label>
-          <div className="flex justify-center space-x-2">
+      {/* ★変更: formのclassNameを 'review-form' に変更 */}
+      <form onSubmit={handleSubmitReview} className="review-form">
+        {/* 評価セクション */}
+        <div className="rating-section"> {/* ★変更: divに 'rating-section' クラスを追加 */}
+          {/* ★変更: labelのclassNameを 'rating-label' に変更 */}
+          <label className="rating-label">評価 (1-5)</label>
+          {/* ★変更: divのclassNameを 'star-buttons-container' に変更 */}
+          <div className="star-buttons-container">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
                 onClick={() => handleRatingChange(star)}
-                // 評価の星のスタイルを改善
+                // ★変更: classNameを動的に変更
                 className={`
-                  text-5xl cursor-pointer transition-colors duration-200 ease-in-out
-                  ${rating >= star ? 'text-yellow-400 drop-shadow-md' : 'text-gray-300 hover:text-gray-400'}
-                  focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-75
+                  star-button
+                  ${rating >= star ? 'selected' : ''}
                 `}
-                aria-label={`${star}つ星を評価`} // スクリーンリーダー用ラベル
+                aria-label={`${star}つ星を評価`}
               >
                 ★
               </button>
             ))}
           </div>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="error-message">{error}</p>} {/* ★変更: pのclassNameを 'error-message' に変更 */}
         </div>
 
-        <div>
-          <label htmlFor="comment" className="block text-lg font-medium mb-2">
+        {/* コメントセクション */}
+        <div className="comment-section"> {/* ★変更: divに 'comment-section' クラスを追加 */}
+          {/* ★変更: labelのclassNameを 'comment-label' に変更 */}
+          <label htmlFor="comment" className="comment-label">
             コメント (任意)
           </label>
           <textarea
@@ -112,24 +118,30 @@ export default function ReviewPage() {
             rows={4}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            // ★変更: textareaのclassNameを 'comment-textarea' に変更
+            className="comment-textarea"
             placeholder="感想や学びを共有してください..."
           ></textarea>
         </div>
 
+        {/* 送信ボタン */}
+        {/* ★変更: buttonのclassNameを 'submit-button' に変更 */}
         <button
           type="submit"
-          disabled={isSubmitting} // 送信中はボタンを無効化
-          className="px-8 py-4 bg-blue-600 text-white text-xl rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isSubmitting}
+          className="submit-button"
         >
           {isSubmitting ? '送信中...' : 'レビューを投稿'}
         </button>
       </form>
 
-      <div className="mt-8">
+      {/* ダッシュボードに戻るボタン（Linkではなくbuttonなので） */}
+      {/* ★変更: divのclassNameを 'back-to-dashboard-container' に変更 */}
+      <div className="back-to-dashboard-container">
+        {/* ★変更: buttonのclassNameを 'back-to-dashboard-button' に変更 */}
         <button
           onClick={() => navigate('/dashboard')}
-          className="text-gray-600 hover:underline"
+          className="back-to-dashboard-button"
         >
           レビューせずにダッシュボードに戻る
         </button>
