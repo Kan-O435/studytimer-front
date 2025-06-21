@@ -1,31 +1,47 @@
-// src/components/WeeklyReport.jsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './WeeklyReport.css'; // CSSファイルを読み込む
 
-const WeeklyReport = () => {
-  const [reportData, setReportData] = useState([]);
+interface Session {
+  id: number;
+  task_title: string;
+  duration_minutes: number;
+  rating?: number;
+  comment?: string;
+}
+
+interface DayData {
+  date: string;
+  total_duration_minutes: number;
+  average_rating?: number;
+  llm_feedback?: string | null;
+  sessions: Session[];
+}
+
+const WeeklyReport: React.FC = () => {
+  const [reportData, setReportData] = useState<DayData[]>([]);
+  const [summary, setSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWeeklyReport = async () => {
       setLoading(true);
       setError(null);
 
-      // localStorageから認証ヘッダーを取得
-      // devise_token_auth が設定されていればこれらのキーが存在するはずです
       const accessToken = localStorage.getItem('access-token');
       const client = localStorage.getItem('client');
       const uid = localStorage.getItem('uid');
 
       if (!accessToken || !client || !uid) {
-        setError("認証情報が見つかりません。ログインしてください。");
+        setError('認証情報が見つかりません。ログインしてください。');
         setLoading(false);
         return;
       }
 
       try {
         const response = await fetch('http://localhost:3000/api/v1/weekly_reports', {
-          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'access-token': accessToken,
@@ -35,116 +51,74 @@ const WeeklyReport = () => {
         });
 
         if (!response.ok) {
-          // エラーレスポンスの本文を読み込む
           const errorData = await response.json();
-          throw new Error(errorData.errors ? errorData.errors.join(', ') : 'レポートの取得に失敗しました');
+          throw new Error(errorData.errors?.join(', ') || 'レポートの取得に失敗しました');
         }
 
-        const data = await response.json();
-        setReportData(data);
-      } catch (err) {
-        console.error("週次レポートの取得中にエラーが発生しました:", err);
-        setError(`レポートの取得に失敗しました: ${err}`);
+        const json = await response.json();
+        setReportData(json.data ?? json); // json.data に対応 or そのまま
+        setSummary(json.summary ?? null);
+      } catch (err: any) {
+        console.error('週次レポート取得エラー:', err);
+        setError(err.message || '不明なエラー');
       } finally {
         setLoading(false);
       }
     };
 
     fetchWeeklyReport();
-  }, []); // 空の依存配列はコンポーネトのマウント時に一度だけ実行されることを意味します
+  }, []);
 
-  if (loading) {
-    return <div style={styles.container}>週次レポートを読み込み中...</div>;
-  }
-
-  if (error) {
-    return <div style={styles.container}>エラー: {error}</div>;
-  }
-
-  if (reportData.length === 0) {
-    return <div style={styles.container}>今週のデータはありません。</div>;
-  }
+  if (loading) return <div className="container">週次レポートを読み込み中...</div>;
+  if (error) return <div className="container error">エラー: {error}</div>;
+  if (reportData.length === 0) return <div className="container">今週のデータはありません。</div>;
 
   return (
-    <div style={styles.container}>
-      <h2>週次レポート</h2>
-      {reportData.map((dayData) => (
-        <div key={dayData.date} style={styles.dayCard}>
-          <h3 style={styles.dayDate}>{dayData.date}</h3>
-          <p>合計学習時間: <strong style={styles.duration}>{dayData.total_duration_minutes}分</strong></p>
-          <p>平均評価: {dayData.average_rating ? dayData.average_rating.toFixed(1) : '評価なし'}</p>
-          {dayData.llm_feedback && <p>LLMからのフィードバック: {dayData.llm_feedback}</p>}
+    <div className="container">
+      <h2 className="title">週次レポート</h2>
 
-          <h4 style={styles.sessionsHeader}>セッション詳細:</h4>
-          {dayData.sessions.length > 0 ? (
-            <ul style={styles.sessionList}>
-              {dayData.sessions.map((session) => (
-                <li key={session.id} style={styles.sessionItem}>
-                  <strong>{session.task_title}</strong>: {session.duration_minutes}分
-                  {session.rating && ` (評価: ${session.rating})`}
-                  {session.comment && ` - ${session.comment}`}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p style={styles.noSessions}>この日はセッションがありませんでした。</p>
-          )}
+      {summary && (
+        <div className="summaryBox">
+          <h3 className="summaryHeader">今週の総括（LLM）</h3>
+          <p>{summary}</p>
         </div>
-      ))}
+      )}
+
+      <div className="reportScrollWrapper">
+        {reportData.map((day) => (
+          <div key={day.date} className="dayCard">
+            <h3 className="dayDate">{day.date}</h3>
+            <p>合計学習時間: <strong className="duration">{day.total_duration_minutes}分</strong></p>
+            <p>平均評価: {day.average_rating ?? '評価なし'}</p>
+            {day.llm_feedback && <p>LLMフィードバック: {day.llm_feedback}</p>}
+
+            <h4 className="sessionsHeader">セッション詳細</h4>
+            {day.sessions.length > 0 ? (
+              <ul className="sessionList">
+                {day.sessions.map((s) => (
+                  <li key={s.id} className="sessionItem">
+                    <strong>{s.task_title}</strong>: {s.duration_minutes}分
+                    {s.rating !== undefined && ` (評価: ${s.rating})`}
+                    {s.comment && ` - ${s.comment}`}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="noSessions">セッションはありませんでした。</p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="dashboardButton"
+        onClick={() => navigate('/dashboard')}
+        aria-label="ダッシュボードに戻る"
+      >
+        Dashboardに戻る
+      </button>
     </div>
   );
-};
-
-// スタイリング (簡易的なインラインスタイル)
-const styles = {
-  container: {
-    fontFamily: 'Arial, sans-serif',
-    maxWidth: '800px',
-    margin: '20px auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    backgroundColor: '#f9f9f9',
-  },
-  dayCard: {
-    border: '1px solid #eee',
-    borderRadius: '5px',
-    padding: '15px',
-    marginBottom: '15px',
-    backgroundColor: '#fff',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-  },
-  dayDate: {
-    color: '#333',
-    borderBottom: '1px solid #eee',
-    paddingBottom: '5px',
-    marginBottom: '10px',
-  },
-  duration: {
-    color: '#007bff',
-    fontWeight: 'bold',
-  },
-  sessionsHeader: {
-    color: '#555',
-    marginTop: '15px',
-    marginBottom: '8px',
-  },
-  sessionList: {
-    listStyle: 'none',
-    padding: '0',
-  },
-  sessionItem: {
-    backgroundColor: '#f0f8ff',
-    padding: '8px 10px',
-    marginBottom: '5px',
-    borderRadius: '4px',
-    borderLeft: '3px solid #007bff',
-  },
-  noSessions: {
-    color: '#888',
-    fontStyle: 'italic',
-  },
 };
 
 export default WeeklyReport;

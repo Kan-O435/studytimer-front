@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './DashboardPage.css';
 
 type Task = {
   id: number;
@@ -14,16 +15,13 @@ export default function DashboardPage() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const navigate = useNavigate();
 
-  // 認証ヘッダーを取得する関数
   const getAuthHeaders = () => ({
     'access-token': localStorage.getItem('access-token') || '',
     client: localStorage.getItem('client') || '',
     uid: localStorage.getItem('uid') || '',
   });
 
-  // ログインチェック
   useEffect(() => {
-    // トークンがない場合は即リダイレクト
     if (
       !localStorage.getItem('access-token') ||
       !localStorage.getItem('client') ||
@@ -41,8 +39,6 @@ export default function DashboardPage() {
         setTasks(res.data);
       } catch (error: any) {
         console.error('タスク取得に失敗しました', error);
-
-        // もし401 Unauthorizedならログイン画面へ
         if (error.response && error.response.status === 401) {
           navigate('/login');
         }
@@ -86,57 +82,49 @@ export default function DashboardPage() {
     navigate(`/timer/${taskId}`, { state: { taskTitle } });
   };
 
-  if (loading) return <p>読み込み中...</p>;
+  if (loading) return <p className="loading-text">読み込み中...</p>;
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">ダッシュボード</h1>
+    <div className="dashboard-wrapper">
+      <h1 className="dashboard-title">ダッシュボード</h1>
 
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">やることリスト</h2>
+      <section className="tasks-section">
+        <h2 className="section-title">やることリスト</h2>
 
-        <div className="flex mb-4">
+        <div className="task-input-area">
           <input
             type="text"
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             placeholder="新しいタスクを入力"
-            className="flex-grow border border-gray-300 rounded px-3 py-2 mr-2"
+            className="task-input"
           />
-          <button
-            onClick={handleAddTask}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
+          <button onClick={handleAddTask} className="btn btn-add" type="button">
             追加
           </button>
         </div>
 
         {tasks.length === 0 ? (
-          <p>やることはまだありません。</p>
+          <p className="no-tasks-text">やることはまだありません。</p>
         ) : (
-          <ul>
+          <ul className="task-list">
             {tasks.map((task) => (
-              <li
-                key={task.id}
-                className="flex items-center justify-between mb-2 border-b pb-1"
-              >
-                <span
-                  className={`${
-                    task.completed ? 'line-through text-gray-400' : ''
-                  }`}
-                >
+              <li key={task.id} className="task-item">
+                <span className={`task-title ${task.completed ? 'completed' : ''}`}>
                   {task.title}
                 </span>
-                <div>
+                <div className="task-actions">
                   <button
                     onClick={() => handleStartTimer(task.id, task.title)}
-                    className="ml-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                    className="btn btn-start-timer"
+                    type="button"
                   >
                     タイマーを開始
                   </button>
                   <button
                     onClick={() => handleDeleteTask(task.id)}
-                    className="ml-2 text-red-500 hover:text-red-700 text-sm"
+                    className="btn btn-delete"
+                    type="button"
                   >
                     削除
                   </button>
@@ -147,12 +135,9 @@ export default function DashboardPage() {
         )}
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold mb-4">評価</h2>
-        <Link
-          to="/weekly-report"
-          className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-        >
+      <section className="evaluation-section">
+        <h2 className="section-title">評価</h2>
+        <Link to="/weekly-report" className="btn btn-evaluation">
           評価ページへ
         </Link>
       </section>

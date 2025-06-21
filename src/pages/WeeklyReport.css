@@ -1,0 +1,127 @@
+.container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 100%;
+  margin: 30px auto;
+  padding: 25px 30px;
+  background-color: #f5f8fa;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  color: #222;
+  overflow-x: hidden;
+}
+
+.error {
+  color: #c53030;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #1a202c;
+  border-bottom: 2px solid #3182ce;
+  padding-bottom: 8px;
+}
+
+.summaryBox {
+  background-color: #fff9db;
+  border: 1.5px solid #ffe08a;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 30px;
+  color: #975a0a;
+}
+
+.summaryHeader {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* 横スクロールラッパー */
+.reportScrollWrapper {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dayCard {
+  min-width: 300px;
+  max-width: 320px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  background-color: #ffffff;
+  padding: 18px 22px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(50, 50, 93, 0.05);
+}
+
+.dayDate {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #2d3748;
+  border-bottom: 1.5px solid #edf2f7;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+}
+
+.duration {
+  color: #3182ce;
+  font-weight: 700;
+}
+
+.sessionsHeader {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sessionList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sessionItem {
+  background-color: #ebf8ff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border-left: 4px solid #3182ce;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #2a4365;
+}
+
+.noSessions {
+  color: #718096;
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-top: 5px;
+}
+
+.dashboardButton {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #3182ce;
+  color: white;
+  font-weight: 600;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.dashboardButton:hover {
+  background-color: #2b6cb0;
+}

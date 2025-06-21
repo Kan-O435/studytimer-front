@@ -1,8 +1,7 @@
-// src/pages/LoginPage.tsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import './LoginPage.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,82 +14,81 @@ export default function LoginPage() {
     setErrorMessage('');
 
     try {
-      const res = await axios.post(
-        // ★★★ ここを修正します ★★★
-        'http://localhost:3000/api/v1/auth/sign_in', // /api/v1/ を追加
-        {
-          email: email,
-          password: password,
-        }
-      );
+      const res = await axios.post('http://localhost:3000/api/v1/auth/sign_in', {
+        email,
+        password,
+      });
 
-      localStorage.setItem('access-token', res.headers['access-token'] as string);
-      localStorage.setItem('client', res.headers['client'] as string);
-      localStorage.setItem('uid', res.headers['uid'] as string);
+      localStorage.setItem('access-token', res.headers['access-token']);
+      localStorage.setItem('client', res.headers['client']);
+      localStorage.setItem('uid', res.headers['uid']);
 
-      // axiosのデフォルトヘッダーにも設定することで、以後のリクエストで認証情報を自動的に付与
-      axios.defaults.headers.common['access-token'] = res.headers['access-token'] as string;
-      axios.defaults.headers.common['client'] = res.headers['client'] as string;
-      axios.defaults.headers.common['uid'] = res.headers['uid'] as string;
-
+      axios.defaults.headers.common['access-token'] = res.headers['access-token'];
+      axios.defaults.headers.common['client'] = res.headers['client'];
+      axios.defaults.headers.common['uid'] = res.headers['uid'];
 
       console.log('ログイン成功！', res.data);
       navigate('/dashboard');
     } catch (error: any) {
-      console.error('ログイン失敗:', error.response ? error.response.data : error);
-      if (error.response && error.response.data && error.response.data.errors) {
-        setErrorMessage(error.response.data.errors[0] || 'ログインに失敗しました。');
-      } else {
-        setErrorMessage('ネットワークエラー、または予期せぬエラーが発生しました。');
-      }
+      const msg = error.response?.data?.errors?.[0] ?? 'ログインに失敗しました。';
+      setErrorMessage(msg);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">ログイン</h2>
-      {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
-      <form onSubmit={handleLogin}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-            メールアドレス
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
-            パスワード
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex items-center justify-between">
+    <div className="login-wrapper">
+      {/* 流体風 背景アニメーション */}
+      <div className="background-glow-1" />
+      <div className="background-glow-2" />
+
+      {/* メインフォーム */}
+      <div className="login-container">
+        <h2 className="login-title">ログイン</h2>
+
+        {errorMessage && (
+          <div className="error-message">{errorMessage}</div>
+        )}
+
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">メールアドレス</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">パスワード</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-input"
+              placeholder="●●●●●●●"
+            />
+          </div>
+
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-            disabled={!email || !password} // メールアドレスとパスワードが入力されていない場合はボタンを無効化
+            disabled={!email || !password}
+            className={`login-button ${email && password ? 'enabled' : 'disabled'}`}
           >
             ログイン
           </button>
+        </form>
+
+        <div className="register-link">
+          アカウントをお持ちでない方は{' '}
+          <Link to="/register" className="link">新規登録</Link>
         </div>
-      </form>
-      <div className="text-center mt-4">
-        <Link to="/register" className="text-blue-500 hover:text-blue-800 text-sm">
-          アカウントをお持ちでない方はこちら
-        </Link>
       </div>
     </div>
   );
