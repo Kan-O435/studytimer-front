@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom'; // <--- ここに Link を追加！
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -16,20 +16,23 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post(
-        'http://localhost:3000/auth/sign_in',
+        // ★★★ ここを修正します ★★★
+        'http://localhost:3000/api/v1/auth/sign_in', // /api/v1/ を追加
         {
-          email: email, // ★以前修正した部分です。session ネストは削除されています。
+          email: email,
           password: password,
         }
       );
 
-      localStorage.setItem('access-token', res.headers['access-token']);
-      localStorage.setItem('client', res.headers['client']);
-      localStorage.setItem('uid', res.headers['uid']);
+      localStorage.setItem('access-token', res.headers['access-token'] as string);
+      localStorage.setItem('client', res.headers['client'] as string);
+      localStorage.setItem('uid', res.headers['uid'] as string);
 
-      axios.defaults.headers.common['access-token'] = res.headers['access-token'];
-      axios.defaults.headers.common['client'] = res.headers['client'];
-      axios.defaults.headers.common['uid'] = res.headers['uid'];
+      // axiosのデフォルトヘッダーにも設定することで、以後のリクエストで認証情報を自動的に付与
+      axios.defaults.headers.common['access-token'] = res.headers['access-token'] as string;
+      axios.defaults.headers.common['client'] = res.headers['client'] as string;
+      axios.defaults.headers.common['uid'] = res.headers['uid'] as string;
+
 
       console.log('ログイン成功！', res.data);
       navigate('/dashboard');
@@ -78,13 +81,13 @@ export default function LoginPage() {
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            disabled={!email || !password} // メールアドレスとパスワードが入力されていない場合はボタンを無効化
           >
             ログイン
           </button>
         </div>
       </form>
       <div className="text-center mt-4">
-        {/* Link コンポーネントが使われている部分 */}
         <Link to="/register" className="text-blue-500 hover:text-blue-800 text-sm">
           アカウントをお持ちでない方はこちら
         </Link>
