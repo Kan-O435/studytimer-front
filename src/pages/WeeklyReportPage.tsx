@@ -56,7 +56,7 @@ const WeeklyReport: React.FC = () => {
         }
 
         const json = await response.json();
-        console.log('受信した summary:', json.summary); // ← ログ追加
+        console.log('受信した summary:', json.summary);
         setReportData(json.data ?? []);
 
         if (typeof json.summary === 'string') {
